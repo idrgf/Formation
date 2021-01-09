@@ -5,7 +5,7 @@
         </template>
         <div class="py-4" v-for="course in this.courseList" :key="course.id">
             <div class="mx-8 bg-gray-200 rounded shadow p-4">
-                <div class="text-sm text-white-300">Mise en ligne par {{ course.user.name }}</div>
+                <div class="text-sm text-white-300">Mise en ligne par {{ course.user.name }} - <span class="textgray-500 text-sm">{{ course.participants }} participant<span v-if="parseInt(course.participants) > 1 ">s</span></span></div>
                 <div class="flex justify-between items-center">
                     <div class="text-4xl">{{ course.titre }}</div>
                     <div>{{ course.episodes_count }} épisodes</div>

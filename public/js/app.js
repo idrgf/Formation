@@ -3469,17 +3469,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['episodeId'],
+  props: ['episodeId', 'watchedEpisodes'],
+  data: function data() {
+    return {
+      watchedEp: this.watchedEpisodes,
+      isWatched: null
+    };
+  },
   methods: {
     toggleProgress: function toggleProgress() {
+      var _this = this;
+
       axios.post('/toggleProgress', {
         episodeId: this.episodeId
       }).then(function (response) {
-        return console.log(response);
+        if (response.status === 200) {
+          _this.isWatched = !_this.isWatched;
+        }
       })["catch"](function (error) {
         return console.log(error);
       });
+    },
+    isWatchedEpisode: function isWatchedEpisode() {
+      var _this2 = this;
+
+      return this.watchedEp.find(function (episode) {
+        return episode.id === _this2.episodeId;
+      }) ? true : false;
     }
+  },
+  mounted: function mounted() {
+    console.log(this.watchedEp);
+    this.isWatched = this.isWatchedEpisode();
   }
 });
 
@@ -3535,7 +3556,7 @@ __webpack_require__.r(__webpack_exports__);
       currentKey: 0
     };
   },
-  props: ['course'],
+  props: ['course', 'watched'],
   methods: {
     switchEpisode: function switchEpisode(index) {
       this.currentKey = index;
@@ -47736,7 +47757,13 @@ var render = function() {
         return _c("div", { key: course.id, staticClass: "py-4" }, [
           _c("div", { staticClass: "mx-8 bg-gray-200 rounded shadow p-4" }, [
             _c("div", { staticClass: "text-sm text-white-300" }, [
-              _vm._v("Mise en ligne par " + _vm._s(course.user.name))
+              _vm._v("Mise en ligne par " + _vm._s(course.user.name) + " - "),
+              _c("span", { staticClass: "textgray-500 text-sm" }, [
+                _vm._v(_vm._s(course.participants) + " participant"),
+                parseInt(course.participants) > 1
+                  ? _c("span", [_vm._v("s")])
+                  : _vm._e()
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "flex justify-between items-center" }, [
@@ -47800,7 +47827,7 @@ var render = function() {
           }
         }
       },
-      [_vm._v("Terminé")]
+      [_vm._v(_vm._s(this.isWatched ? "Terminé" : "Voir"))]
     )
   ])
 }
@@ -47896,7 +47923,12 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _c("progress-button", { attrs: { "episode-id": episode.id } })
+                  _c("progress-button", {
+                    attrs: {
+                      "episode-id": episode.id,
+                      "watched-episodes": _vm.watched
+                    }
+                  })
                 ],
                 1
               )

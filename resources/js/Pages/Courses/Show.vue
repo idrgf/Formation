@@ -16,7 +16,7 @@
                                 Voir l'épisode
                             </button>
                         </div>
-                        <progress-button :episode-id="episode.id" />
+                        <progress-button :episode-id="episode.id" :watched-episodes="watched" />
                     </li>
                 </ul>
             </div>
@@ -39,7 +39,7 @@
                 currentKey: 0
             }
         },
-        props: ['course'],
+        props: ['course', 'watched'],
         methods:{
             switchEpisode(index){
                 this.currentKey = index;
